@@ -1,10 +1,9 @@
 package io.github.cafeteru.testjava.repositories;
 
+import static io.github.cafeteru.testjava.util.DateConverter.stringToLocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,8 +41,8 @@ class PriceRepositoryTest {
         String startDate, String endDate, Integer priceList, Integer priority, Double price) {
         return Price.builder()
             .brandId(1)
-            .startDate(getLocalDate(startDate))
-            .endDate(getLocalDate(endDate))
+            .startDate(stringToLocalDateTime(startDate))
+            .endDate(stringToLocalDateTime(endDate))
             .priceList(priceList)
             .productId(35455)
             .priority(priority)
@@ -54,13 +53,13 @@ class PriceRepositoryTest {
 
     @Test
     void testConsultDateBeforeAll() {
-        var found = pricesRepository.consult(getLocalDate("2020-06-13-23.59.00"), 35455, 1, PageRequest.of(0, 1));
+        var found = pricesRepository.consult(stringToLocalDateTime("2020-06-13-23.59.00"), 35455, 1, PageRequest.of(0, 1));
         assertTrue(found.isEmpty());
     }
 
     @Test
     void testConsultDateAfterAll() {
-        var found = pricesRepository.consult(getLocalDate("2026-06-13-23.59.00"), 35455, 1, PageRequest.of(0, 1));
+        var found = pricesRepository.consult(stringToLocalDateTime("2026-06-13-23.59.00"), 35455, 1, PageRequest.of(0, 1));
         assertTrue(found.isEmpty());
     }
 
@@ -70,7 +69,7 @@ class PriceRepositoryTest {
         "2020-06-14-16.00.00",
         "2020-06-15-16.00.00"})
     void testConsultWithExamples(String applicationDate) {
-        var found = pricesRepository.consult(getLocalDate(applicationDate), 35455, 1, PageRequest.of(0, 1));
+        var found = pricesRepository.consult(stringToLocalDateTime(applicationDate), 35455, 1, PageRequest.of(0, 1));
         assertEquals(1, found.size());
         assertEquals(35.50D, found.get(0).getPrice());
     }
@@ -79,14 +78,8 @@ class PriceRepositoryTest {
     void testConsultWithValueValidAndPriority0() {
         var price = createProduct("2020-06-14-01.00.00", "2020-12-31-23.59.59", 1, 0, 40D);
         pricesRepository.save(price);
-        var found = pricesRepository.consult(getLocalDate("2020-06-14-02.00.00"), 35455, 1, PageRequest.of(0, 1));
+        var found = pricesRepository.consult(stringToLocalDateTime("2020-06-14-02.00.00"), 35455, 1, PageRequest.of(0, 1));
         assertEquals(1, found.size());
         assertEquals(40D, found.get(0).getPrice());
-    }
-
-
-    private LocalDateTime getLocalDate(String applicationDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH.mm.ss");
-        return LocalDateTime.parse(applicationDate, formatter);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.github.cafeteru.testjava.infrastructure.constants.Dates;
 import io.github.cafeteru.testjava.infrastructure.constants.Tags;
 import io.github.cafeteru.testjava.infrastructure.constants.Urls;
 import io.github.cafeteru.testjava.model.records.ConsultRS;
@@ -54,7 +55,7 @@ public class PricesController {
     }
 
     private LocalDateTime getLocalDate(String applicationDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH.mm.ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Dates.PATTERN);
         return LocalDateTime.parse(applicationDate, formatter);
     }
 }

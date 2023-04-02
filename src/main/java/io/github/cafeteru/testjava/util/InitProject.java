@@ -1,7 +1,7 @@
 package io.github.cafeteru.testjava.util;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import static io.github.cafeteru.testjava.util.DateConverter.stringToLocalDateTime;
+
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -33,18 +33,13 @@ public class InitProject {
         String startDate, String endDate, Integer priceList, Integer priority, Double price) {
         return Price.builder()
             .brandId(1)
-            .startDate(getLocalDate(startDate))
-            .endDate(getLocalDate(endDate))
+            .startDate(stringToLocalDateTime(startDate))
+            .endDate(stringToLocalDateTime(endDate))
             .priceList(priceList)
             .productId(35455)
             .priority(priority)
             .price(price)
             .curr("EUR")
             .build();
-    }
-
-    private LocalDateTime getLocalDate(String applicationDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH.mm.ss");
-        return LocalDateTime.parse(applicationDate, formatter);
     }
 }
