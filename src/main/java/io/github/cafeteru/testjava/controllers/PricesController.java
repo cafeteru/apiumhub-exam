@@ -11,7 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.github.cafeteru.testjava.infrastructure.constants.Tags;
 import io.github.cafeteru.testjava.infrastructure.constants.Urls;
+import io.github.cafeteru.testjava.model.records.ConsultRQ;
+import io.github.cafeteru.testjava.model.records.ConsultRS;
+import io.github.cafeteru.testjava.services.PricesService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,19 +30,33 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Tag(name = Tags.PRICES)
 public class PricesController {
+    private final PricesService pricesService;
 
+    @Operation(summary = "REST endpoint for querying")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Success", content = {
+            @Content(schema = @Schema(implementation = ConsultRS.class))
+        })
+    })
     @GetMapping(Urls.CONSULT)
-    public ResponseEntity<Object> consult(
-        @Parameter(description = "Fecha de aplicación", example = "2023-04-02-00.00.00")
+    public ResponseEntity<ConsultRS> consult(
+        @Parameter(description = "Application date", example = "2023-04-02-00.00.00")
         String applicationDate,
-        @Parameter(description = "Identificador de producto", example = "1")
+        @Parameter(description = "Product identifier", example = "1")
         Integer idProduct,
-        @Parameter(description = "Identificador de cadena", example = "1")
-        Integer idBrand) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH.mm.ss");
-        LocalDate localDate = LocalDate.parse(applicationDate, formatter);
+        @Parameter(description = "Brand identifier", example = "1")
+        Integer idBrand
+    ) {
+        LocalDate localDate = getLocalDate(applicationDate);
         log.info(String.format("consult(%s, %d, %d) - start", localDate, idProduct, idBrand));
+        var consultRQ = new ConsultRQ(applicationDate, idProduct, idBrand);
+        var consultRS = pricesService.consult(consultRQ);
         log.info(String.format("consult(%s, %d, %d) - end", localDate, idProduct, idBrand));
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(consultRS, HttpStatus.OK);
+    }
+
+    private static LocalDate getLocalDate(String applicationDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH.mm.ss");
+        return LocalDate.parse(applicationDate, formatter);
     }
 }
