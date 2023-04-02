@@ -1,15 +1,14 @@
 package io.github.cafeteru.testjava.util;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Service;
 
-import io.github.cafeteru.testjava.model.Prices;
+import io.github.cafeteru.testjava.model.Price;
 import io.github.cafeteru.testjava.repositories.PricesRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -30,12 +29,12 @@ public class InitProject {
         );
     }
 
-    private Prices createProduct(
+    private Price createProduct(
         String startDate, String endDate, Integer priceList, Integer priority, Double price) {
-        return Prices.builder()
+        return Price.builder()
             .brandId(1)
-            .startDate(convertStringToDate(startDate))
-            .endDate(convertStringToDate(endDate))
+            .startDate(getLocalDate(startDate))
+            .endDate(getLocalDate(endDate))
             .priceList(priceList)
             .productId(35455)
             .priority(priority)
@@ -44,11 +43,8 @@ public class InitProject {
             .build();
     }
 
-    private Date convertStringToDate(String date) {
-        try {
-            return new SimpleDateFormat("yyyy-MM-dd-HH.mm.ss").parse(date);
-        } catch (ParseException e) {
-            return new Date();
-        }
+    private LocalDateTime getLocalDate(String applicationDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH.mm.ss");
+        return LocalDateTime.parse(applicationDate, formatter);
     }
 }

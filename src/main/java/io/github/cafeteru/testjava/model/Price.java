@@ -1,6 +1,6 @@
 package io.github.cafeteru.testjava.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -25,16 +25,16 @@ import lombok.ToString;
 @Entity
 @Builder
 @Table(name = "PRICES")
-public class Prices {
+public class Price {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "BRAND_ID")
     private Integer brandId;
-    @Column(name = "START_DATE")
-    private Date startDate;
-    @Column(name = "END_DATE")
-    private Date endDate;
+    @Column(name = "START_DATE", columnDefinition = "TIMESTAMP")
+    private LocalDateTime startDate;
+    @Column(name = "END_DATE", columnDefinition = "TIMESTAMP")
+    private LocalDateTime endDate;
     @Column(name = "PRICE_LIST")
     private Integer priceList;
     @Column(name = "PRODUCT_ID")
@@ -52,7 +52,7 @@ public class Prices {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Prices product = (Prices) o;
+        Price product = (Price) o;
         return Objects.equals(id, product.id) && Objects.equals(brandId, product.brandId) &&
             Objects.equals(startDate, product.startDate) && Objects.equals(endDate, product.endDate) &&
             Objects.equals(priceList, product.priceList) && Objects.equals(productId, product.productId)

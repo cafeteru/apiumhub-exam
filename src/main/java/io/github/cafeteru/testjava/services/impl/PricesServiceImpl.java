@@ -1,8 +1,9 @@
 package io.github.cafeteru.testjava.services.impl;
 
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
 
-import io.github.cafeteru.testjava.model.records.ConsultRQ;
 import io.github.cafeteru.testjava.model.records.ConsultRS;
 import io.github.cafeteru.testjava.repositories.PricesRepository;
 import io.github.cafeteru.testjava.services.PricesService;
@@ -16,15 +17,16 @@ public class PricesServiceImpl implements PricesService {
     private final PricesRepository pricesRepository;
 
     @Override
-    public ConsultRS consult(ConsultRQ consultRQ) {
-        log.info(String.format("consult(%s) - start", consultRQ));
-        var result = pricesRepository.findById(1L).map(price ->
+    public ConsultRS consult(LocalDateTime applicationDate, Integer idProduct, Integer idBrand) {
+        log.info(String.format("consult(%s, %d, %d) - start", applicationDate, idProduct, idBrand));
+        var price = pricesRepository.consult(applicationDate, idProduct, idBrand);
+        var consultRS = price.map(value ->
             new ConsultRS(
-                price.getProductId(), price.getBrandId(), price.getPriceList(),
-                price.getStartDate(), price.getEndDate(), price.getPrice()
+                value.getProductId(), value.getBrandId(), value.getPriceList(),
+                value.getStartDate(), value.getEndDate(), value.getPrice()
             )
         ).orElse(null);
-        log.info(String.format("consult(%s) - end", consultRQ));
-        return result;
+        log.info(String.format("consult(%s, %d, %d) - end", applicationDate, idProduct, idBrand));
+        return consultRS;
     }
 }

@@ -1,13 +1,13 @@
 package io.github.cafeteru.testjava.model.records;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public record ConsultRS(
     int productId,
     int brandId,
     double priceList,
-    Date startDate,
-    Date endDate,
+    LocalDateTime startDate,
+    LocalDateTime endDate,
     double finalPrice
 ) {
 }

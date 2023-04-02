@@ -1,8 +1,9 @@
 package io.github.cafeteru.testjava.services;
 
-import io.github.cafeteru.testjava.model.records.ConsultRQ;
+import java.time.LocalDateTime;
+
 import io.github.cafeteru.testjava.model.records.ConsultRS;
 
 public interface PricesService {
-    ConsultRS consult(ConsultRQ consultRQ);
+    ConsultRS consult(LocalDateTime applicationDate, Integer idProduct, Integer idBrand);
 }
