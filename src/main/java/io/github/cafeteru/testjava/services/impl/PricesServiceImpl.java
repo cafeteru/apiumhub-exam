@@ -2,6 +2,7 @@ package io.github.cafeteru.testjava.services.impl;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import io.github.cafeteru.testjava.model.records.ConsultRS;
@@ -19,13 +20,15 @@ public class PricesServiceImpl implements PricesService {
     @Override
     public ConsultRS consult(LocalDateTime applicationDate, Integer idProduct, Integer idBrand) {
         log.info(String.format("consult(%s, %d, %d) - start", applicationDate, idProduct, idBrand));
-        var price = pricesRepository.consult(applicationDate, idProduct, idBrand);
-        var consultRS = price.map(value ->
-            new ConsultRS(
+        var price = pricesRepository.consult(applicationDate, idProduct, idBrand, PageRequest.of(0, 1));
+        ConsultRS consultRS = null;
+        if (Boolean.FALSE.equals(price.isEmpty())) {
+            var value = price.get(0);
+            consultRS = new ConsultRS(
                 value.getProductId(), value.getBrandId(), value.getPriceList(),
                 value.getStartDate(), value.getEndDate(), value.getPrice()
-            )
-        ).orElse(null);
+            );
+        }
         log.info(String.format("consult(%s, %d, %d) - end", applicationDate, idProduct, idBrand));
         return consultRS;
     }

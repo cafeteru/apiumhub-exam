@@ -15,11 +15,11 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class InitProject {
-    private final PricesRepository productRepository;
+    private final PricesRepository pricesRepository;
 
     @PostConstruct
     public void init() {
-        productRepository.saveAll(
+        pricesRepository.saveAll(
             List.of(
                 createProduct("2020-06-14-00.00.00", "2020-12-31-23.59.59", 1, 0, 35.50D),
                 createProduct("2020-06-14-15.00.00", "2020-06-14-18.30.00", 2, 1, 25.45D),

@@ -1,8 +1,9 @@
 package io.github.cafeteru.testjava.repositories;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,15 +11,20 @@ import org.springframework.data.repository.query.Param;
 import io.github.cafeteru.testjava.model.Price;
 
 public interface PricesRepository extends JpaRepository<Price, Long> {
-    @Query("select p from Price " +
-        "p where p.startDate <= :localDateTime and p.endDate >= :localDateTime and " +
-        "p.productId = :productId and " +
-        "p.brandId = :brandId and " +
-        "p.priority = (select min(p2.priority) from Price " +
-        "p2 where p2.startDate <= :localDateTime and p2.endDate >= :localDateTime)")
-    Optional<Price> consult(
+
+    @Query("SELECT p FROM Price p " +
+        "WHERE p.startDate <= :localDateTime AND p.endDate >= :localDateTime AND " +
+        "p.productId = :productId AND " +
+        "p.brandId = :brandId AND " +
+        "p.priority = (SELECT MIN(p2.priority) FROM Price p2 " +
+        "WHERE p2.startDate <= :localDateTime AND p2.endDate >= :localDateTime) " +
+        "ORDER BY p.price DESC")
+    List<Price> consult(
         @Param("localDateTime") LocalDateTime localDateTime,
         @Param("productId") Integer productId,
-        @Param("brandId") Integer brandId);
+        @Param("brandId") Integer brandId,
+        Pageable pageable);
 
 }
+
+
