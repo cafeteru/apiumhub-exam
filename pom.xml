@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>io.github.cafeteru</groupId>
-    <artifactId>testjava</artifactId>
+    <artifactId>apiumhubExam</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Test Java</name>
-    <description>Demo project for Spring Boot</description>
+    <name>Apiumhub Exam</name>
+    <description>Apiumhub Exam Backend Skills</description>
     <properties>
         <java.version>17</java.version>
     </properties>
