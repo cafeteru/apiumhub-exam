@@ -15,7 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 
 import io.github.cafeteru.apiumhubexam.infrastructure.constants.Dates;
-import io.github.cafeteru.apiumhubexam.model.records.ConsultRS;
+import io.github.cafeteru.apiumhubexam.model.dto.ConsultRS;
 import io.github.cafeteru.apiumhubexam.services.PricesService;
 
 class PriceControllerTest {
@@ -33,13 +33,20 @@ class PriceControllerTest {
 
     @Test
     void testConsult() {
-        ConsultRS consultRS = new ConsultRS(1, 1, 1, LocalDateTime.now(), LocalDateTime.now(), 1);
+        var consultRS = ConsultRS.builder()
+            .productId(1)
+            .brandId(1)
+            .priceList(1)
+            .startDate(LocalDateTime.now())
+            .endDate(LocalDateTime.now())
+            .finalPrice(1.0)
+            .build();
         when(pricesService.consult(any(), any(), any())).thenReturn(consultRS);
         var result = pricesController.consult(getLocalDateTimeString(LocalDateTime.now()), 1, 1);
         Assertions.assertNotNull(result);
         Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
         Assertions.assertNotNull(result.getBody());
-        Assertions.assertEquals(consultRS.productId(), result.getBody().productId());
+        Assertions.assertEquals(consultRS.getProductId(), result.getBody().getProductId());
     }
 
     @Test

@@ -1,4 +1,4 @@
-# Test-java
+# Apiumhub-Exam
 
 ## Enunciado
 
@@ -66,3 +66,8 @@ Se valorará:
 Diseño y construcción del servicio.
 Calidad de Código.
 Resultados correctos en los test.
+
+## Solución
+
+Para poder ejecutar la aplicación se ha instalado un servidor OpenApi, se puede acceder a la siguiente URL:
+- [http://localhost:8080](http://localhost:8080)

@@ -5,5 +5,6 @@ public class Urls {
     public static final String CONSULT = "/consult";
 
     private Urls() {
+        throw new IllegalStateException("Utility class");
     }
 }

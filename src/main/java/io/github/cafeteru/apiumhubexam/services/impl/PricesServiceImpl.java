@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import io.github.cafeteru.apiumhubexam.model.records.ConsultRS;
+import io.github.cafeteru.apiumhubexam.model.dto.ConsultRS;
 import io.github.cafeteru.apiumhubexam.repositories.PricesRepository;
 import io.github.cafeteru.apiumhubexam.services.PricesService;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +21,20 @@ public class PricesServiceImpl implements PricesService {
     public ConsultRS consult(LocalDateTime applicationDate, Integer idProduct, Integer idBrand) {
         log.info(String.format("consult(%s, %d, %d) - start", applicationDate, idProduct, idBrand));
         var price = pricesRepository.consult(applicationDate, idProduct, idBrand, PageRequest.of(0, 1));
-        ConsultRS consultRS = null;
         if (Boolean.FALSE.equals(price.isEmpty())) {
             var value = price.get(0);
-            consultRS = new ConsultRS(
-                value.getProductId(), value.getBrandId(), value.getPriceList(),
-                value.getStartDate(), value.getEndDate(), value.getPrice()
-            );
+            var consultRS = ConsultRS.builder()
+                .productId(value.getProductId())
+                .brandId(value.getBrandId())
+                .priceList(value.getPriceList())
+                .startDate(value.getStartDate())
+                .endDate(value.getEndDate())
+                .finalPrice(value.getPrice())
+                .build();
+            log.info(String.format("consult(%s, %d, %d) - end", applicationDate, idProduct, idBrand));
+            return consultRS;
         }
         log.info(String.format("consult(%s, %d, %d) - end", applicationDate, idProduct, idBrand));
-        return consultRS;
+        return null;
     }
 }

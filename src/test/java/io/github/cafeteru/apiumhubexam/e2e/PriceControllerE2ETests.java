@@ -9,8 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
 import io.github.cafeteru.apiumhubexam.infrastructure.constants.Urls;
-import io.github.cafeteru.apiumhubexam.model.records.ConsultRS;
-import io.github.cafeteru.apiumhubexam.model.records.ErrorDto;
+import io.github.cafeteru.apiumhubexam.model.dto.ConsultRS;
+import io.github.cafeteru.apiumhubexam.model.dto.ErrorDto;
 import io.restassured.RestAssured;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -34,7 +34,7 @@ class PriceControllerE2ETests {
             .extract()
             .body()
             .as(ErrorDto.class);
-        Assertions.assertEquals("Invalid LocalDateTime: 00.00", result.message());
+        Assertions.assertEquals("Invalid LocalDateTime: 00.00", result.getMessage());
     }
 
     @ParameterizedTest
@@ -56,6 +56,6 @@ class PriceControllerE2ETests {
             .extract()
             .body()
             .as(ConsultRS.class);
-        Assertions.assertEquals(35.50, result.finalPrice());
+        Assertions.assertEquals(35.50, result.getFinalPrice());
     }
 }

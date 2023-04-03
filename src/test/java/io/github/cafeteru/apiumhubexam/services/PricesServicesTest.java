@@ -43,7 +43,7 @@ class PricesServicesTest {
         when(pricesRepository.consult(any(), any(), any(), any())).thenReturn(Collections.singletonList(price));
         var result = pricesService.consult(LocalDateTime.now(), 1, 1);
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(price.getProductId(), result.productId());
+        Assertions.assertEquals(price.getProductId(), result.getProductId());
     }
 
     @Test

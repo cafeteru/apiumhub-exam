@@ -1,19 +1,16 @@
 package io.github.cafeteru.apiumhubexam.controllers;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.github.cafeteru.apiumhubexam.infrastructure.constants.Dates;
 import io.github.cafeteru.apiumhubexam.infrastructure.constants.Tags;
 import io.github.cafeteru.apiumhubexam.infrastructure.constants.Urls;
-import io.github.cafeteru.apiumhubexam.model.records.ConsultRS;
+import io.github.cafeteru.apiumhubexam.model.dto.ConsultRS;
 import io.github.cafeteru.apiumhubexam.services.PricesService;
+import io.github.cafeteru.apiumhubexam.util.DateConverter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -47,15 +44,10 @@ public class PricesController {
         @Parameter(description = "Brand identifier", example = "1")
         Integer idBrand
     ) {
-        var localDate = getLocalDate(applicationDate);
-        log.info(String.format("consult(%s, %d, %d) - start", localDate, idProduct, idBrand));
+        log.info(String.format("consult(%s, %d, %d) - start", applicationDate, idProduct, idBrand));
+        var localDate = DateConverter.stringToLocalDateTime(applicationDate);
         var consultRS = pricesService.consult(localDate, idProduct, idBrand);
-        log.info(String.format("consult(%s, %d, %d) - end", localDate, idProduct, idBrand));
+        log.info(String.format("consult(%s, %d, %d) - end", applicationDate, idProduct, idBrand));
         return new ResponseEntity<>(consultRS, HttpStatus.OK);
-    }
-
-    private LocalDateTime getLocalDate(String applicationDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Dates.PATTERN);
-        return LocalDateTime.parse(applicationDate, formatter);
     }
 }

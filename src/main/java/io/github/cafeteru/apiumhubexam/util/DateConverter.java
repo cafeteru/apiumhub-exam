@@ -6,6 +6,10 @@ import java.time.format.DateTimeFormatter;
 import io.github.cafeteru.apiumhubexam.infrastructure.constants.Dates;
 
 public class DateConverter {
+    private DateConverter() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static LocalDateTime stringToLocalDateTime(String applicationDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Dates.PATTERN);
         return java.time.LocalDateTime.parse(applicationDate, formatter);
