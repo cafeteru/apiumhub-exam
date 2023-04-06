@@ -3,6 +3,7 @@ package io.github.cafeteru.apiumhubexam.services;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
@@ -38,7 +39,7 @@ class PricesServicesTest {
             .priceList(1)
             .startDate(LocalDateTime.now())
             .endDate(LocalDateTime.now())
-            .price(1.0)
+            .price(BigDecimal.ONE)
             .build();
         when(pricesRepository.consult(any(), any(), any(), any())).thenReturn(Collections.singletonList(price));
         var result = pricesService.consult(LocalDateTime.now(), 1, 1);

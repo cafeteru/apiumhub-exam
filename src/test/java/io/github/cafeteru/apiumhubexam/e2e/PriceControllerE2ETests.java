@@ -1,5 +1,7 @@
 package io.github.cafeteru.apiumhubexam.e2e;
 
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,6 +58,6 @@ class PriceControllerE2ETests {
             .extract()
             .body()
             .as(ConsultRS.class);
-        Assertions.assertEquals(35.50, result.getFinalPrice());
+        Assertions.assertEquals(0, BigDecimal.valueOf(35.50D).compareTo(result.getFinalPrice()));
     }
 }

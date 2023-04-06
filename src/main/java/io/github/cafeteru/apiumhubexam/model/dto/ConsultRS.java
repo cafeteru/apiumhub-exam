@@ -1,5 +1,6 @@
 package io.github.cafeteru.apiumhubexam.model.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
@@ -17,5 +18,5 @@ public class ConsultRS {
     private Integer priceList;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private Double finalPrice;
+    private BigDecimal finalPrice;
 }

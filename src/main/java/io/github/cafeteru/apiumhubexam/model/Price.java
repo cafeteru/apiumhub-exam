@@ -1,5 +1,6 @@
 package io.github.cafeteru.apiumhubexam.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -39,12 +40,10 @@ public class Price {
     private Integer priceList;
     @Column(name = "PRODUCT_ID")
     private Integer productId;
-    // PRIORITY: Desambiguador de aplicación de precios.
-    // Si dos tarifas coinciden en un rango de fechas se aplica la de mayor prioridad (mayor valor numérico).
     @Column(name = "PRIORITY")
     private Integer priority;
     @Column(name = "PRICE")
-    private Double price;
+    private BigDecimal price;
     @Column(name = "CURR")
     private String curr;
 

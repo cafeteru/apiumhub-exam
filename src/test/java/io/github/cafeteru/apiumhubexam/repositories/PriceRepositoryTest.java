@@ -4,6 +4,7 @@ import static io.github.cafeteru.apiumhubexam.util.DateConverter.stringToLocalDa
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -29,16 +30,16 @@ class PriceRepositoryTest {
     public void init() {
         pricesRepository.saveAll(
             List.of(
-                createProduct("2020-06-14-00.00.00", "2020-12-31-23.59.59", 1, 0, 35.50D),
-                createProduct("2020-06-14-15.00.00", "2020-06-14-18.30.00", 2, 1, 25.45D),
-                createProduct("2020-06-15-00.00.00", "2020-06-15-11.00.00", 3, 1, 30.50D),
-                createProduct("2020-06-15-16.00.00", "2020-12-31-23.59.59", 4, 1, 38.95D)
+                createPrice("2020-06-14-00.00.00", "2020-12-31-23.59.59", 1, 0, BigDecimal.valueOf(35.50D)),
+                createPrice("2020-06-14-15.00.00", "2020-06-14-18.30.00", 2, 1, BigDecimal.valueOf(25.45D)),
+                createPrice("2020-06-15-00.00.00", "2020-06-15-11.00.00", 3, 1, BigDecimal.valueOf(30.50D)),
+                createPrice("2020-06-15-16.00.00", "2020-12-31-23.59.59", 4, 1, BigDecimal.valueOf(38.95D))
             )
         );
     }
 
-    private Price createProduct(
-        String startDate, String endDate, Integer priceList, Integer priority, Double price) {
+    private Price createPrice(
+        String startDate, String endDate, Integer priceList, Integer priority, BigDecimal price) {
         return Price.builder()
             .brandId(1)
             .startDate(stringToLocalDateTime(startDate))
@@ -71,15 +72,16 @@ class PriceRepositoryTest {
     void testConsultWithExamples(String applicationDate) {
         var found = pricesRepository.consult(stringToLocalDateTime(applicationDate), 35455, 1, PageRequest.of(0, 1));
         assertEquals(1, found.size());
-        assertEquals(35.50D, found.get(0).getPrice());
+        assertEquals(0, BigDecimal.valueOf(35.50D).compareTo(found.get(0).getPrice()));
     }
 
     @Test
     void testConsultWithValueValidAndPriority0() {
-        var price = createProduct("2020-06-14-01.00.00", "2020-12-31-23.59.59", 1, 0, 40D);
+        var priceValue = BigDecimal.valueOf(40D);
+        var price = createPrice("2020-06-14-01.00.00", "2020-12-31-23.59.59", 1, 0, priceValue);
         pricesRepository.save(price);
         var found = pricesRepository.consult(stringToLocalDateTime("2020-06-14-02.00.00"), 35455, 1, PageRequest.of(0, 1));
         assertEquals(1, found.size());
-        assertEquals(40D, found.get(0).getPrice());
+        assertEquals(0, priceValue.compareTo(found.get(0).getPrice()));
     }
 }

@@ -3,6 +3,7 @@ package io.github.cafeteru.apiumhubexam.controllers;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -39,7 +40,7 @@ class PriceControllerTest {
             .priceList(1)
             .startDate(LocalDateTime.now())
             .endDate(LocalDateTime.now())
-            .finalPrice(1.0)
+            .finalPrice(BigDecimal.ONE)
             .build();
         when(pricesService.consult(any(), any(), any())).thenReturn(consultRS);
         var result = pricesController.consult(getLocalDateTimeString(LocalDateTime.now()), 1, 1);
