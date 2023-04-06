@@ -12,6 +12,6 @@ public class DateConverter {
 
     public static LocalDateTime stringToLocalDateTime(String applicationDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Dates.PATTERN);
-        return java.time.LocalDateTime.parse(applicationDate, formatter);
+        return LocalDateTime.parse(applicationDate, formatter);
     }
 }

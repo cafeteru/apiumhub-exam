@@ -1,5 +1,9 @@
 package io.github.cafeteru.apiumhubexam.controllers;
 
+import static io.github.cafeteru.apiumhubexam.util.DateConverter.stringToLocalDateTime;
+
+import java.time.LocalDateTime;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +14,6 @@ import io.github.cafeteru.apiumhubexam.infrastructure.constants.Tags;
 import io.github.cafeteru.apiumhubexam.infrastructure.constants.Urls;
 import io.github.cafeteru.apiumhubexam.model.dto.ConsultRS;
 import io.github.cafeteru.apiumhubexam.services.PricesService;
-import io.github.cafeteru.apiumhubexam.util.DateConverter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -45,9 +48,17 @@ public class PricesController {
         Integer idBrand
     ) {
         log.info(String.format("consult(%s, %d, %d) - start", applicationDate, idProduct, idBrand));
-        var localDate = DateConverter.stringToLocalDateTime(applicationDate);
+        var localDate = getLocalDateTime(applicationDate);
         var consultRS = pricesService.consult(localDate, idProduct, idBrand);
         log.info(String.format("consult(%s, %d, %d) - end", applicationDate, idProduct, idBrand));
         return new ResponseEntity<>(consultRS, HttpStatus.OK);
+    }
+
+    private LocalDateTime getLocalDateTime(String applicationDate) {
+        try {
+            return stringToLocalDateTime(applicationDate);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid LocalDateTime: " + applicationDate, e);
+        }
     }
 }
